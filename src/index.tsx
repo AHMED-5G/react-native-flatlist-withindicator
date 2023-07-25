@@ -3,10 +3,10 @@
 //   return Promise.resolve(a * b);
 // }import { FlatListProps, StyleSheet, View } from "react-native";
 
-import React, { type JSXElementConstructor, type ReactElement } from 'react';
-import type { ListRenderItemInfo } from 'react-native';
+import React from 'react';
 import type { FlatListProps } from 'react-native';
 import { View } from 'react-native';
+import { Dimensions } from 'react-native';
 import { StyleSheet } from 'react-native';
 import Animated, {
   Extrapolation,
@@ -18,83 +18,79 @@ import Animated, {
 } from 'react-native-reanimated';
 
 interface FlatListWithIndicatorInterface<ItemT = any>
-  extends Omit<FlatListProps<ItemT>, 'horizontal' | 'renderItem'> {
+  extends Omit<FlatListProps<ItemT>, 'horizontal'> {
+  // extends Omit<FlatListProps<ItemT>, 'horizontal' | 'renderItem'> {
   activeIndicatorColor: string | number;
   inActiveIndicatorColor: string | number;
   data: Array<ItemT>;
-  CardComponent: (
-    // item: ItemT
-    item: ListRenderItemInfo<ItemT>
-  ) => ReactElement<any, string | JSXElementConstructor<any>>;
   cardWidthPlusMarginValue: number;
+  longIndicatorWidth?: number;
+  shortIndicatorWidth?: number;
+  animationScaleFactor: number;
 }
 
 const FlatListWithIndicator = ({
   activeIndicatorColor,
   inActiveIndicatorColor,
-  CardComponent,
   data,
   cardWidthPlusMarginValue,
+  longIndicatorWidth = 32,
+  shortIndicatorWidth = 12,
+  animationScaleFactor = 1,
   ...props
 }: FlatListWithIndicatorInterface<any>) => {
-  // const data = [1, 2, 3];
-  const longIndicatorWidth = 32;
-  const shortIndicatorWidth = 12;
-  // const cardWidth = wwrosw(250);
-  // const marginValue = wwrosw(16);
-  // const cardWidthPlusMarginValue = cardWidth + marginValue;
-  const firstInput = [0, cardWidthPlusMarginValue];
-  const secondInput = [
-    cardWidthPlusMarginValue,
-    cardWidthPlusMarginValue * 1.5,
-  ];
   const scrollXProgress = useSharedValue(0);
 
-  const leftIndicatorRStyle = useAnimatedStyle(() => {
+  const firstIndicatorRStyle = useAnimatedStyle(() => {
     return {
       width: interpolate(
         scrollXProgress.value,
-        firstInput,
+        [0, cardWidthPlusMarginValue * animationScaleFactor],
         [longIndicatorWidth, shortIndicatorWidth],
         Extrapolation.CLAMP
       ),
-      backgroundColor: interpolateColor(scrollXProgress.value, firstInput, [
-        activeIndicatorColor,
-        inActiveIndicatorColor,
-      ]),
-    };
-  });
 
-  const middleIndicatorRStyle = useAnimatedStyle(() => {
-    return {
-      width: interpolate(
-        scrollXProgress.value,
-        [0, cardWidthPlusMarginValue, cardWidthPlusMarginValue * 1.5],
-        [shortIndicatorWidth, longIndicatorWidth, shortIndicatorWidth],
-        Extrapolation.CLAMP
-      ),
       backgroundColor: interpolateColor(
         scrollXProgress.value,
-        [0, cardWidthPlusMarginValue, cardWidthPlusMarginValue * 1.5],
-        [inActiveIndicatorColor, activeIndicatorColor, inActiveIndicatorColor]
+        [0, cardWidthPlusMarginValue * animationScaleFactor],
+        [activeIndicatorColor, inActiveIndicatorColor]
       ),
     };
   });
 
-  const rightIndicatorRStyle = useAnimatedStyle(() => {
-    return {
-      width: interpolate(
-        scrollXProgress.value,
-        secondInput,
-        [shortIndicatorWidth, longIndicatorWidth],
-        Extrapolation.CLAMP
-      ),
-      backgroundColor: interpolateColor(scrollXProgress.value, secondInput, [
-        inActiveIndicatorColor,
-        activeIndicatorColor,
-      ]),
-    };
-  });
+  function MedWithIndex(index: number) {
+    const myInput = [
+      ((cardWidthPlusMarginValue * index) / 2) * animationScaleFactor,
+      cardWidthPlusMarginValue * index * animationScaleFactor,
+      cardWidthPlusMarginValue * 2 * index * animationScaleFactor,
+    ];
+    const medIndicatorRStyle = useAnimatedStyle(() => {
+      return {
+        width: interpolate(
+          scrollXProgress.value,
+          myInput,
+          // [
+          //   ((cardWidthPlusMarginValue * animationScaleFactor) / 2) * index,
+          //   cardWidthPlusMarginValue * animationScaleFactor * index,
+          //   cardWidthPlusMarginValue * 2 * animationScaleFactor * index,
+          // ],
+          [shortIndicatorWidth, longIndicatorWidth, shortIndicatorWidth],
+          Extrapolation.CLAMP
+        ),
+        backgroundColor: interpolateColor(
+          scrollXProgress.value,
+          myInput,
+          // [
+          //   ((cardWidthPlusMarginValue * animationScaleFactor) / 2) * index,
+          //   cardWidthPlusMarginValue * animationScaleFactor * index,
+          //   cardWidthPlusMarginValue * 2 * animationScaleFactor * index,
+          // ],
+          [inActiveIndicatorColor, activeIndicatorColor, inActiveIndicatorColor]
+        ),
+      };
+    });
+    return medIndicatorRStyle;
+  }
 
   const handler = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -116,44 +112,25 @@ const FlatListWithIndicator = ({
         horizontal
         data={data}
         onScroll={handler}
-        renderItem={({ ...itemProps }) => {
-          return <CardComponent {...{ ...itemProps }} />;
-        }}
         keyExtractor={(_, index) => index.toString()}
       />
       <View style={styles.indicatorContainer}>
-        <Animated.View
-          style={[
-            {
-              width: longIndicatorWidth,
-              borderRadius: 16,
-              height: 4,
-              backgroundColor: 'white',
-            },
-            leftIndicatorRStyle,
-          ]}
-        />
-        <Animated.View
-          style={[
-            {
-              marginLeft: 4,
-              width: longIndicatorWidth,
-              borderRadius: 16,
-              height: 4,
-            },
-            middleIndicatorRStyle,
-          ]}
-        />
-        <Animated.View
-          style={[
-            {
-              marginLeft: 4,
-              height: 4,
-              borderRadius: 16,
-            },
-            rightIndicatorRStyle,
-          ]}
-        />
+        {data.length > 0 &&
+          data.map((_, index) => {
+            return (
+              <Animated.View
+                key={index}
+                style={[
+                  {
+                    borderRadius: 16,
+                    height: 4,
+                    margin: 2,
+                  },
+                  index === 0 ? firstIndicatorRStyle : MedWithIndex(index),
+                ]}
+              />
+            );
+          })}
       </View>
     </View>
   );

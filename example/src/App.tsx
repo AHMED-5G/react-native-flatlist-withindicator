@@ -1,28 +1,27 @@
 /* eslint-disable react/no-unstable-nested-components */
 import * as React from 'react';
 
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Dimensions } from 'react-native';
 import { FlatListWithIndicator } from 'react-native-flatlist-withindicator';
+const width = Dimensions.get('screen').width;
 
-const marginValue = 16;
-const cardWidth = 150;
+const marginValue = 10;
+const cardWidth = 200;
+
 export default function App() {
-  // const [result, setResult] = React.useState<number | undefined>();
-
-  // React.useEffect(() => {
-  //   multiply(3, 7).then(setResult);
-  // }, []);
   return (
     <View style={styles.container}>
       <FlatListWithIndicator
         activeIndicatorColor={'#005596'}
-        inActiveIndicatorColor={'#E5EEF5'}
-        CardComponent={({ item }) => (
-          <View style={styles.cardContainer}>
-            <Text>{item}</Text>
-          </View>
-        )}
-        data={[1, 2, 3]}
+        inActiveIndicatorColor={'lightgrey'}
+        renderItem={({ item }) => {
+          return (
+            <View style={[styles.cardContainer]}>
+              <Text>{item}</Text>
+            </View>
+          );
+        }}
+        data={[1, 2, 3, 4, 5]}
         cardWidthPlusMarginValue={cardWidth + marginValue}
         showsHorizontalScrollIndicator={false}
       />
