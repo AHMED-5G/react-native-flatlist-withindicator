@@ -11,6 +11,8 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
+import { I18nManager } from 'react-native';
+import { Dimensions } from 'react-native';
 
 interface FlatListWithIndicatorInterface<ItemT = any>
   extends Omit<FlatListProps<ItemT>, 'horizontal'> {
@@ -24,6 +26,7 @@ interface FlatListWithIndicatorInterface<ItemT = any>
   containerStyle?: ViewStyle;
   indicatorContainerStyle?: ViewStyle;
   customsIndicatorStyle?: ViewStyle;
+  isRTL?: boolean;
 }
 
 const FlatListWithIndicator = ({
@@ -37,9 +40,13 @@ const FlatListWithIndicator = ({
   containerStyle,
   indicatorContainerStyle,
   customsIndicatorStyle,
+  isRTL = I18nManager.isRTL,
   ...props
 }: FlatListWithIndicatorInterface<any>) => {
-  const scrollXProgress = useSharedValue(0);
+  const totalOffsetWidth = data.length * cardWidthPlusMarginValue;
+
+  const width = Dimensions.get('window').width;
+  const scrollXProgress = useSharedValue(totalOffsetWidth);
 
   const firstIndicatorRStyle = useAnimatedStyle(() => {
     return {
@@ -94,28 +101,125 @@ const FlatListWithIndicator = ({
 
   const handler = useAnimatedScrollHandler({
     onScroll: (event) => {
+      console.log(
+        'index.tsx -> ',
+        // event.contentOffset.x + cardWidthPlusMarginValue * animationScaleFactor,
+        // event.contentSize.width,
+        // totalOffsetWidth
+        event.contentOffset.x
+      );
       scrollXProgress.value = event.contentOffset.x;
     },
   });
 
+  const initialRTLOffsetWidth =
+    totalOffsetWidth - cardWidthPlusMarginValue / animationScaleFactor;
+  const RTLFirstIndicatorRStyle = useAnimatedStyle(() => {
+    console.log(
+      'index.tsx -> RTLFirstIndicatorRStyle -> ',
+      totalOffsetWidth - cardWidthPlusMarginValue / animationScaleFactor
+    );
+    //attention that its count event.contentOffset.x from ful value to zero so its require to subtract initial layout width
+
+    totalOffsetWidth - cardWidthPlusMarginValue / animationScaleFactor;
+    return {
+      width: interpolate(
+        scrollXProgress.value,
+        [
+          initialRTLOffsetWidth,
+          initialRTLOffsetWidth - cardWidthPlusMarginValue,
+        ],
+        [activeIndicatorWidth, inactiveIndicatorWidth],
+        Extrapolation.CLAMP
+      ),
+
+      backgroundColor: interpolateColor(
+        scrollXProgress.value,
+        [
+          totalOffsetWidth,
+          totalOffsetWidth - cardWidthPlusMarginValue * animationScaleFactor,
+        ],
+        ['red', 'blue']
+      ),
+    };
+  });
+
+  function RTLMedWithIndex(index: number) {
+    const myInput = [
+      ((cardWidthPlusMarginValue * (data.length - index)) / 2) *
+        animationScaleFactor,
+      cardWidthPlusMarginValue * (data.length - index) * animationScaleFactor,
+      cardWidthPlusMarginValue *
+        2 *
+        (data.length - index) *
+        animationScaleFactor,
+    ];
+    const medIndicatorRStyle = useAnimatedStyle(() => {
+      return {
+        width: interpolate(
+          scrollXProgress.value,
+          myInput,
+          [
+            inactiveIndicatorWidth,
+            activeIndicatorWidth,
+            inactiveIndicatorWidth,
+          ],
+          Extrapolation.CLAMP
+        ),
+        backgroundColor: interpolateColor(scrollXProgress.value, myInput, [
+          inActiveIndicatorColor,
+          activeIndicatorColor,
+          inActiveIndicatorColor,
+        ]),
+      };
+    });
+    return medIndicatorRStyle;
+  }
+
   return (
     <View style={[styles.container, containerStyle]}>
       <Animated.FlatList {...props} horizontal data={data} onScroll={handler} />
-      <View style={[styles.indicatorContainer, indicatorContainerStyle]}>
-        {data.length > 0 &&
-          data.map((_, index) => {
-            return (
-              <Animated.View
-                key={index}
-                style={[
-                  styles.indicatorStyle,
-                  index === 0 ? firstIndicatorRStyle : MedWithIndex(index),
-                  customsIndicatorStyle,
-                ]}
-              />
-            );
-          })}
-      </View>
+      {!isRTL ? (
+        <View style={[styles.indicatorContainer, indicatorContainerStyle]}>
+          {data.length > 0 &&
+            data.map((_, index) => {
+              return (
+                <Animated.View
+                  key={index}
+                  style={[
+                    styles.indicatorStyle,
+                    index === 0 ? firstIndicatorRStyle : MedWithIndex(index),
+                    customsIndicatorStyle,
+                  ]}
+                />
+              );
+            })}
+        </View>
+      ) : (
+        <View
+          style={[
+            styles.indicatorContainer,
+            // { flexDirection: 'row-reverse' },
+            indicatorContainerStyle,
+          ]}
+        >
+          {data.length > 0 &&
+            data.map((_, index) => {
+              return (
+                <Animated.View
+                  key={index}
+                  style={[
+                    styles.indicatorStyle,
+                    index === 0
+                      ? RTLFirstIndicatorRStyle
+                      : RTLMedWithIndex(index),
+                    customsIndicatorStyle,
+                  ]}
+                />
+              );
+            })}
+        </View>
+      )}
     </View>
   );
 };
