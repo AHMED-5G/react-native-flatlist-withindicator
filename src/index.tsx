@@ -1,12 +1,7 @@
-/* eslint-disable react-native/no-inline-styles */
-// export function multiply(a: number, b: number): Promise<number> {
-//   return Promise.resolve(a * b);
-// }import { FlatListProps, StyleSheet, View } from "react-native";
-
 import React from 'react';
+import type { ViewStyle } from 'react-native';
 import type { FlatListProps } from 'react-native';
 import { View } from 'react-native';
-import { Dimensions } from 'react-native';
 import { StyleSheet } from 'react-native';
 import Animated, {
   Extrapolation,
@@ -19,14 +14,16 @@ import Animated, {
 
 interface FlatListWithIndicatorInterface<ItemT = any>
   extends Omit<FlatListProps<ItemT>, 'horizontal'> {
-  // extends Omit<FlatListProps<ItemT>, 'horizontal' | 'renderItem'> {
   activeIndicatorColor: string | number;
   inActiveIndicatorColor: string | number;
   data: Array<ItemT>;
   cardWidthPlusMarginValue: number;
-  longIndicatorWidth?: number;
-  shortIndicatorWidth?: number;
-  animationScaleFactor: number;
+  activeIndicatorWidth?: number;
+  inactiveIndicatorWidth?: number;
+  animationScaleFactor?: number;
+  containerStyle?: ViewStyle;
+  indicatorContainerStyle?: ViewStyle;
+  customsIndicatorStyle?: ViewStyle;
 }
 
 const FlatListWithIndicator = ({
@@ -34,9 +31,12 @@ const FlatListWithIndicator = ({
   inActiveIndicatorColor,
   data,
   cardWidthPlusMarginValue,
-  longIndicatorWidth = 32,
-  shortIndicatorWidth = 12,
+  activeIndicatorWidth = 32,
+  inactiveIndicatorWidth = 12,
   animationScaleFactor = 1,
+  containerStyle,
+  indicatorContainerStyle,
+  customsIndicatorStyle,
   ...props
 }: FlatListWithIndicatorInterface<any>) => {
   const scrollXProgress = useSharedValue(0);
@@ -46,7 +46,7 @@ const FlatListWithIndicator = ({
       width: interpolate(
         scrollXProgress.value,
         [0, cardWidthPlusMarginValue * animationScaleFactor],
-        [longIndicatorWidth, shortIndicatorWidth],
+        [activeIndicatorWidth, inactiveIndicatorWidth],
         Extrapolation.CLAMP
       ),
 
@@ -58,6 +58,12 @@ const FlatListWithIndicator = ({
     };
   });
 
+  /**
+   * Calculates the `medIndicatorRStyle` object based on the provided `index`.
+   * The `animationScaleFactor` parameter affects the scaling and animation behavior of the `medIndicatorRStyle`.
+   * @param index - The index used in the calculations.
+   * @returns The `medIndicatorRStyle` object.
+   */
   function MedWithIndex(index: number) {
     const myInput = [
       ((cardWidthPlusMarginValue * index) / 2) * animationScaleFactor,
@@ -69,24 +75,18 @@ const FlatListWithIndicator = ({
         width: interpolate(
           scrollXProgress.value,
           myInput,
-          // [
-          //   ((cardWidthPlusMarginValue * animationScaleFactor) / 2) * index,
-          //   cardWidthPlusMarginValue * animationScaleFactor * index,
-          //   cardWidthPlusMarginValue * 2 * animationScaleFactor * index,
-          // ],
-          [shortIndicatorWidth, longIndicatorWidth, shortIndicatorWidth],
+          [
+            inactiveIndicatorWidth,
+            activeIndicatorWidth,
+            inactiveIndicatorWidth,
+          ],
           Extrapolation.CLAMP
         ),
-        backgroundColor: interpolateColor(
-          scrollXProgress.value,
-          myInput,
-          // [
-          //   ((cardWidthPlusMarginValue * animationScaleFactor) / 2) * index,
-          //   cardWidthPlusMarginValue * animationScaleFactor * index,
-          //   cardWidthPlusMarginValue * 2 * animationScaleFactor * index,
-          // ],
-          [inActiveIndicatorColor, activeIndicatorColor, inActiveIndicatorColor]
-        ),
+        backgroundColor: interpolateColor(scrollXProgress.value, myInput, [
+          inActiveIndicatorColor,
+          activeIndicatorColor,
+          inActiveIndicatorColor,
+        ]),
       };
     });
     return medIndicatorRStyle;
@@ -99,34 +99,18 @@ const FlatListWithIndicator = ({
   });
 
   return (
-    <View
-      style={{
-        justifyContent: 'center',
-        alignContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-      }}
-    >
-      <Animated.FlatList
-        {...props}
-        horizontal
-        data={data}
-        onScroll={handler}
-        keyExtractor={(_, index) => index.toString()}
-      />
-      <View style={styles.indicatorContainer}>
+    <View style={[styles.container, containerStyle]}>
+      <Animated.FlatList {...props} horizontal data={data} onScroll={handler} />
+      <View style={[styles.indicatorContainer, indicatorContainerStyle]}>
         {data.length > 0 &&
           data.map((_, index) => {
             return (
               <Animated.View
                 key={index}
                 style={[
-                  {
-                    borderRadius: 16,
-                    height: 4,
-                    margin: 2,
-                  },
+                  styles.indicatorStyle,
                   index === 0 ? firstIndicatorRStyle : MedWithIndex(index),
+                  customsIndicatorStyle,
                 ]}
               />
             );
@@ -139,5 +123,16 @@ const FlatListWithIndicator = ({
 export { FlatListWithIndicator };
 
 const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
   indicatorContainer: { marginTop: 16, flexDirection: 'row' },
+  indicatorStyle: {
+    borderRadius: 16,
+    height: 4,
+    margin: 2,
+  },
 });

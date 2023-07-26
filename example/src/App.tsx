@@ -1,9 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 import * as React from 'react';
-
-import { StyleSheet, View, Text, Dimensions } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { FlatListWithIndicator } from 'react-native-flatlist-withindicator';
-const width = Dimensions.get('screen').width;
 
 const marginValue = 10;
 const cardWidth = 200;
@@ -12,7 +10,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <FlatListWithIndicator
-        activeIndicatorColor={'#005596'}
+        activeIndicatorColor={'#6a154e'}
         inActiveIndicatorColor={'lightgrey'}
         renderItem={({ item }) => {
           return (
@@ -24,6 +22,7 @@ export default function App() {
         data={[1, 2, 3, 4, 5]}
         cardWidthPlusMarginValue={cardWidth + marginValue}
         showsHorizontalScrollIndicator={false}
+        keyExtractor={(_, index) => index.toString()}
       />
     </View>
   );
