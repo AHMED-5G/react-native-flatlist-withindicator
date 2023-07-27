@@ -46,7 +46,7 @@ const FlatListWithIndicator = ({
   const totalOffsetWidth = data.length * cardWidthPlusMarginValue;
 
   const width = Dimensions.get('window').width;
-  const scrollXProgress = useSharedValue(totalOffsetWidth);
+  const scrollXProgress = useSharedValue(isRTL ? totalOffsetWidth : 0);
 
   const firstIndicatorRStyle = useAnimatedStyle(() => {
     return {
@@ -99,87 +99,27 @@ const FlatListWithIndicator = ({
     return medIndicatorRStyle;
   }
 
+  //   In the context of a FlatList component in React Native, the event.contentOffset.x property represents the horizontal scroll position of the FlatList. The difference between RTL (Right-to-Left) and LTR (Left-to-Right) for event.contentOffset.x depends on the direction in which the FlatList is being scrolled.
+
+  // In a LTR layout, a positive event.contentOffset.x value indicates that the FlatList is being scrolled to the right, while a negative value indicates scrolling to the left. In other words, as you scroll the FlatList to the right, the event.contentOffset.x value increases, and as you scroll to the left, the value decreases.
+
+  // In an RTL layout, the behavior is reversed. A positive event.contentOffset.x value indicates scrolling to the left, while a negative value indicates scrolling to the right. So, as you scroll the FlatList to the left in an RTL layout, the event.contentOffset.x value increases, and as you scroll to the right, the value decreases.
+
+  // It's important to note that the event.contentOffset.x value is relative to the current scroll position. For example, if you have scrolled the FlatList to the right in a LTR layout, the event.contentOffset.x value will be positive, indicating the amount of scroll to the right from the initial position. Similarly, if you have scrolled the FlatList to the left in an RTL layout, the event.contentOffset.x value will be positive, indicating the amount of scroll to the left from the initial position.
+
+  const initialRTLOffsetWidth = totalOffsetWidth - width;
   const handler = useAnimatedScrollHandler({
     onScroll: (event) => {
-      console.log(
-        'index.tsx -> ',
-        // event.contentOffset.x + cardWidthPlusMarginValue * animationScaleFactor,
-        // event.contentSize.width,
-        // totalOffsetWidth
-        event.contentOffset.x
-      );
-      scrollXProgress.value = event.contentOffset.x;
+      isRTL
+        ? (scrollXProgress.value =
+            initialRTLOffsetWidth - event.contentOffset.x)
+        : (scrollXProgress.value = event.contentOffset.x);
     },
   });
-
-  const initialRTLOffsetWidth =
-    totalOffsetWidth - cardWidthPlusMarginValue / animationScaleFactor;
-  const RTLFirstIndicatorRStyle = useAnimatedStyle(() => {
-    console.log(
-      'index.tsx -> RTLFirstIndicatorRStyle -> ',
-      totalOffsetWidth - cardWidthPlusMarginValue / animationScaleFactor
-    );
-    //attention that its count event.contentOffset.x from ful value to zero so its require to subtract initial layout width
-
-    totalOffsetWidth - cardWidthPlusMarginValue / animationScaleFactor;
-    return {
-      width: interpolate(
-        scrollXProgress.value,
-        [
-          initialRTLOffsetWidth,
-          initialRTLOffsetWidth - cardWidthPlusMarginValue,
-        ],
-        [activeIndicatorWidth, inactiveIndicatorWidth],
-        Extrapolation.CLAMP
-      ),
-
-      backgroundColor: interpolateColor(
-        scrollXProgress.value,
-        [
-          totalOffsetWidth,
-          totalOffsetWidth - cardWidthPlusMarginValue * animationScaleFactor,
-        ],
-        ['red', 'blue']
-      ),
-    };
-  });
-
-  function RTLMedWithIndex(index: number) {
-    const myInput = [
-      ((cardWidthPlusMarginValue * (data.length - index)) / 2) *
-        animationScaleFactor,
-      cardWidthPlusMarginValue * (data.length - index) * animationScaleFactor,
-      cardWidthPlusMarginValue *
-        2 *
-        (data.length - index) *
-        animationScaleFactor,
-    ];
-    const medIndicatorRStyle = useAnimatedStyle(() => {
-      return {
-        width: interpolate(
-          scrollXProgress.value,
-          myInput,
-          [
-            inactiveIndicatorWidth,
-            activeIndicatorWidth,
-            inactiveIndicatorWidth,
-          ],
-          Extrapolation.CLAMP
-        ),
-        backgroundColor: interpolateColor(scrollXProgress.value, myInput, [
-          inActiveIndicatorColor,
-          activeIndicatorColor,
-          inActiveIndicatorColor,
-        ]),
-      };
-    });
-    return medIndicatorRStyle;
-  }
-
   return (
     <View style={[styles.container, containerStyle]}>
       <Animated.FlatList {...props} horizontal data={data} onScroll={handler} />
-      {!isRTL ? (
+      {isRTL ? (
         <View style={[styles.indicatorContainer, indicatorContainerStyle]}>
           {data.length > 0 &&
             data.map((_, index) => {
@@ -196,13 +136,7 @@ const FlatListWithIndicator = ({
             })}
         </View>
       ) : (
-        <View
-          style={[
-            styles.indicatorContainer,
-            // { flexDirection: 'row-reverse' },
-            indicatorContainerStyle,
-          ]}
-        >
+        <View style={[styles.indicatorContainer, indicatorContainerStyle]}>
           {data.length > 0 &&
             data.map((_, index) => {
               return (
@@ -210,9 +144,7 @@ const FlatListWithIndicator = ({
                   key={index}
                   style={[
                     styles.indicatorStyle,
-                    index === 0
-                      ? RTLFirstIndicatorRStyle
-                      : RTLMedWithIndex(index),
+                    index === 0 ? firstIndicatorRStyle : MedWithIndex(index),
                     customsIndicatorStyle,
                   ]}
                 />
