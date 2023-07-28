@@ -4,10 +4,10 @@
 
 `react-native-flatlist-withindicator` is a package that extends the functionality of the original React Native FlatList component. It provides customizable indicators to display the current active item in a horizontal list.
 
-<video src='./src/assets/screen.mp4' width=400 height=700 controls ></video>
-
+<img src='./src/assets/screen.gif' width=370 height=700  />
 
 ## Features
+
 - Customize indicators to show the current active item
 - Enhance user experience with visual indicators
 - Built on top of the original React Native FlatList component
@@ -105,7 +105,6 @@ const styles = StyleSheet.create({
   text: { marginLeft: 10, fontSize: 14, fontWeight: '500' },
   cardText: { fontSize: 20, fontWeight: '800' },
 });
-
 ```
 
 ## Props
