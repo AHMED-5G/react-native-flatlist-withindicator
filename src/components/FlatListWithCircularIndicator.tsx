@@ -39,10 +39,7 @@ const FlatListWithCircularIndicator = ({
       backgroundColor: interpolateColor(
         scrollXProgress.value,
         [0, cardWidthPlusMarginValue * animationScaleFactor],
-        [
-          activeIndicatorColor as string | number,
-          inActiveIndicatorColor as string | number,
-        ]
+        [activeIndicatorColor, inActiveIndicatorColor] as string[]
       ),
     };
   });
@@ -62,10 +59,10 @@ const FlatListWithCircularIndicator = ({
     const medIndicatorRStyle = useAnimatedStyle(() => {
       return {
         backgroundColor: interpolateColor(scrollXProgress.value, myInput, [
-          inActiveIndicatorColor as string | number,
-          activeIndicatorColor as string | number,
-          inActiveIndicatorColor as string | number,
-        ]),
+          inActiveIndicatorColor,
+          activeIndicatorColor,
+          inActiveIndicatorColor,
+        ] as string[]),
       };
     });
     return medIndicatorRStyle;
