@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import { FlatListWithIndicator } from '../index';
+import { FlatListWithRectangleIndicator } from '../index';
 
 it.todo('write a test');
 
@@ -12,7 +12,7 @@ describe('FlatListWithIndicator', () => {
 
   it('renders without crashing', () => {
     render(
-      <FlatListWithIndicator
+      <FlatListWithRectangleIndicator
         renderItem={undefined}
         activeIndicatorColor={activeIndicatorColor}
         inActiveIndicatorColor={inActiveIndicatorColor}
@@ -24,7 +24,7 @@ describe('FlatListWithIndicator', () => {
 
   it('renders the correct number of indicators', () => {
     const { getAllByTestId } = render(
-      <FlatListWithIndicator
+      <FlatListWithRectangleIndicator
         renderItem={undefined}
         activeIndicatorColor={activeIndicatorColor}
         inActiveIndicatorColor={inActiveIndicatorColor}
@@ -39,7 +39,7 @@ describe('FlatListWithIndicator', () => {
 
   it('updates the scrollXProgress value on scroll', () => {
     const { getByTestId } = render(
-      <FlatListWithIndicator
+      <FlatListWithRectangleIndicator
         activeIndicatorColor={activeIndicatorColor}
         inActiveIndicatorColor={inActiveIndicatorColor}
         data={data}
