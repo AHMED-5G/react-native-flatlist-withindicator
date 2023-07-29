@@ -9,7 +9,7 @@ import Animated, {
 import { I18nManager } from 'react-native';
 import { Dimensions } from 'react-native';
 import { FlatList } from 'react-native';
-import type { ReactNativeFlatListWithIndicatorInterface } from 'lib/typescript/types';
+import type { ReactNativeFlatListWithIndicatorInterface } from '../types';
 
 interface FlatListWithCircularIndicatorInterface
   extends ReactNativeFlatListWithIndicatorInterface {
