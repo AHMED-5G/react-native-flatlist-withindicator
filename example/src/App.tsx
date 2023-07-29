@@ -32,7 +32,6 @@ export default function App() {
           renderItem={({ item }) => <Card item={item} />}
           data={data}
           cardWidthPlusMarginValue={cardWidth + marginValue}
-          showsHorizontalScrollIndicator={false}
           keyExtractor={(_, index) => index.toString()}
         />
       </View>
@@ -43,7 +42,6 @@ export default function App() {
           renderItem={({ item }) => <Card item={item} />}
           data={data}
           cardWidthPlusMarginValue={cardWidth + marginValue}
-          showsHorizontalScrollIndicator={false}
           keyExtractor={(_, index) => index.toString()}
           animationScaleFactor={0.57}
         />
@@ -55,7 +53,6 @@ export default function App() {
           renderItem={({ item }) => <Card item={item} />}
           data={data}
           cardWidthPlusMarginValue={cardWidth + marginValue}
-          showsHorizontalScrollIndicator={false}
           keyExtractor={(_, index) => index.toString()}
           animationScaleFactor={0.57}
         />

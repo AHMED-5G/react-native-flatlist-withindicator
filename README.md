@@ -57,7 +57,6 @@ export default function App() {
           renderItem={({ item }) => <Card item={item} />}
           data={data}
           cardWidthPlusMarginValue={cardWidth + marginValue}
-          showsHorizontalScrollIndicator={false}
           keyExtractor={(_, index) => index.toString()}
         />
       </View>
@@ -68,7 +67,6 @@ export default function App() {
           renderItem={({ item }) => <Card item={item} />}
           data={data}
           cardWidthPlusMarginValue={cardWidth + marginValue}
-          showsHorizontalScrollIndicator={false}
           keyExtractor={(_, index) => index.toString()}
           animationScaleFactor={0.57}
         />
@@ -80,7 +78,6 @@ export default function App() {
           renderItem={({ item }) => <Card item={item} />}
           data={data}
           cardWidthPlusMarginValue={cardWidth + marginValue}
-          showsHorizontalScrollIndicator={false}
           keyExtractor={(_, index) => index.toString()}
           animationScaleFactor={0.57}
         />
@@ -140,7 +137,11 @@ const styles = StyleSheet.create({
 | `customsIndicatorStyle`    | `ViewStyle`  | Optional          | Additional styles to be applied to the custom indicators.                                            |
 | `isRTL`                    | `boolean`    | Optional          | Determines if the layout is right-to-left. Default value is based on the device's language settings. |
 
-Note: Any other props accepted by the React Native FlatList component can also be used with react-native-flatlist-withindicator.
+Note: Any other props accepted by the React Native FlatList component can also be used with `react-native-flatlist-withindicator`. However, please be aware that the following props are excluded from the standard FlatList component:
+
+- `horizontal`: This prop is not applicable to the react-native-flatlist-withindicator component since it is designed to display a horizontal list.
+
+- `showsHorizontalScrollIndicator`: This prop is not applicable to the `react-native-flatlist-withindicator` component since it handles its own indicator display.
 
 ## animationScaleFactor Prop
 

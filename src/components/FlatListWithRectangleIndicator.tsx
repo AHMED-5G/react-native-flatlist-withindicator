@@ -1,33 +1,22 @@
 import React from 'react';
-import type { ViewStyle } from 'react-native';
-import type { FlatListProps } from 'react-native';
 import { View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import Animated, {
   Extrapolation,
   interpolate,
   interpolateColor,
-  useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
 import { I18nManager } from 'react-native';
 import { Dimensions } from 'react-native';
-import type { ColorValue } from 'react-native';
+import type { ReactNativeFlatListWithIndicatorInterface } from 'src/types';
+import { FlatList } from 'react-native';
 
-interface FlatListWithRectangleIndicatorInterface<ItemT = any>
-  extends Omit<FlatListProps<ItemT>, 'horizontal'> {
-  activeIndicatorColor: ColorValue;
-  inActiveIndicatorColor: ColorValue;
-  data: Array<ItemT>;
-  cardWidthPlusMarginValue: number;
+interface FlatListWithRectangleIndicatorInterface
+  extends ReactNativeFlatListWithIndicatorInterface {
   activeIndicatorWidth?: number;
   inactiveIndicatorWidth?: number;
-  animationScaleFactor?: number;
-  containerStyle?: ViewStyle;
-  indicatorContainerStyle?: ViewStyle;
-  customsIndicatorStyle?: ViewStyle;
-  isRTL?: boolean;
 }
 
 const FlatListWithRectangleIndicator = ({
@@ -43,7 +32,7 @@ const FlatListWithRectangleIndicator = ({
   customsIndicatorStyle,
   isRTL = I18nManager.isRTL,
   ...props
-}: FlatListWithRectangleIndicatorInterface<any>) => {
+}: FlatListWithRectangleIndicatorInterface) => {
   const totalOffsetWidth = data.length * cardWidthPlusMarginValue;
 
   const width = Dimensions.get('window').width;
@@ -112,17 +101,20 @@ const FlatListWithRectangleIndicator = ({
   // It's important to note that the event.contentOffset.x value is relative to the current scroll position. For example, if you have scrolled the FlatList to the right in a LTR layout, the event.contentOffset.x value will be positive, indicating the amount of scroll to the right from the initial position. Similarly, if you have scrolled the FlatList to the left in an RTL layout, the event.contentOffset.x value will be positive, indicating the amount of scroll to the left from the initial position.
 
   const initialRTLOffsetWidth = totalOffsetWidth - width;
-  const handler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      const { contentOffset } = event;
-      scrollXProgress.value = isRTL
-        ? initialRTLOffsetWidth - contentOffset.x
-        : contentOffset.x;
-    },
-  });
+
   return (
     <View style={[styles.container, containerStyle]}>
-      <Animated.FlatList {...props} horizontal data={data} onScroll={handler} />
+      <FlatList
+        {...props}
+        horizontal
+        data={data}
+        onScroll={(e) => {
+          scrollXProgress.value = isRTL
+            ? initialRTLOffsetWidth - e.nativeEvent.contentOffset.x
+            : e.nativeEvent.contentOffset.x;
+        }}
+        showsHorizontalScrollIndicator={false}
+      />
       <View style={[styles.indicatorContainer, indicatorContainerStyle]}>
         {data.length > 0 &&
           data.map((_, index) => {

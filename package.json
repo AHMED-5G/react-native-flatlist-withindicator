@@ -1,6 +1,6 @@
 {
   "name": "react-native-flatlist-withindicator",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "flatlist with indicator",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
