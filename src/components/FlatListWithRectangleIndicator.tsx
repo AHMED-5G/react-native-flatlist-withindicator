@@ -31,6 +31,7 @@ const FlatListWithRectangleIndicator = ({
   indicatorContainerStyle,
   customsIndicatorStyle,
   isRTL = I18nManager.isRTL,
+  passOnScrollEvent,
   ...props
 }: FlatListWithRectangleIndicatorInterface) => {
   const totalOffsetWidth = data.length * cardWidthPlusMarginValue;
@@ -109,6 +110,7 @@ const FlatListWithRectangleIndicator = ({
         horizontal
         data={data}
         onScroll={(e) => {
+          passOnScrollEvent?.(e);
           scrollXProgress.value = isRTL
             ? initialRTLOffsetWidth - e.nativeEvent.contentOffset.x
             : e.nativeEvent.contentOffset.x;

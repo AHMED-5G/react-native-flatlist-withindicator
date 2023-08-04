@@ -1,11 +1,15 @@
-import type { ViewStyle } from 'react-native';
+import type {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  ViewStyle,
+} from 'react-native';
 import type { ColorValue } from 'react-native';
 import type { FlatListProps } from 'react-native';
 
 export interface ReactNativeFlatListWithIndicatorInterface<ItemT = any>
   extends Omit<
     FlatListProps<ItemT>,
-    'horizontal' | 'showsHorizontalScrollIndicator'
+    'horizontal' | 'showsHorizontalScrollIndicator' | 'onScroll'
   > {
   activeIndicatorColor: ColorValue;
   inActiveIndicatorColor: ColorValue;
@@ -16,4 +20,5 @@ export interface ReactNativeFlatListWithIndicatorInterface<ItemT = any>
   indicatorContainerStyle?: ViewStyle;
   customsIndicatorStyle?: ViewStyle;
   isRTL?: boolean;
+  passOnScrollEvent?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }

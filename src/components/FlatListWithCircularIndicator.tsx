@@ -27,6 +27,7 @@ const FlatListWithCircularIndicator = ({
   indicatorContainerStyle,
   customsIndicatorStyle,
   isRTL = I18nManager.isRTL,
+  passOnScrollEvent,
   ...props
 }: FlatListWithCircularIndicatorInterface) => {
   const totalOffsetWidth = data.length * cardWidthPlusMarginValue;
@@ -77,6 +78,7 @@ const FlatListWithCircularIndicator = ({
         horizontal
         data={data}
         onScroll={(e) => {
+          passOnScrollEvent?.(e);
           scrollXProgress.value = isRTL
             ? initialRTLOffsetWidth - e.nativeEvent.contentOffset.x
             : e.nativeEvent.contentOffset.x;
