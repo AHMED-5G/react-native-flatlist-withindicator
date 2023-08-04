@@ -9,16 +9,37 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import { I18nManager } from 'react-native';
-import { Dimensions } from 'react-native';
-import type { ReactNativeFlatListWithIndicatorInterface } from '../types';
-import { FlatList } from 'react-native';
+import type {
+  ReactNativeFlatListWithIndicatorInterface,
+  ActiveInactiveIndicatorColorInterface,
+} from '../types';
+import SharedFlatList from './SharedFlatList';
 
 interface FlatListWithRectangleIndicatorInterface
-  extends ReactNativeFlatListWithIndicatorInterface {
+  extends ReactNativeFlatListWithIndicatorInterface,
+    ActiveInactiveIndicatorColorInterface {
   activeIndicatorWidth?: number;
   inactiveIndicatorWidth?: number;
 }
 
+/**
+ * A function that renders a flat list component with rectangular indicators.
+ *
+ * @param {Array} data - The data to be rendered in the flat list.
+ * @param {string} activeIndicatorColor - The color of the active indicator.
+ * @param {string} inActiveIndicatorColor - The color of the inactive indicator.
+ * @param {number} cardWidthPlusMarginValue - The width of the card plus margin.
+ * @param {number} animationScaleFactor - The scaling factor for animation.
+ * @param {Object} containerStyle - The style object for the container.
+ * @param {Object} indicatorContainerStyle - The style object for the indicator container.
+ * @param {Object} customsIndicatorStyle - The style object for the custom indicator.
+ * @param {boolean} isRTL - Flag indicating if the layout is right-to-left.
+ * @param {function} passOnScrollEvent - Function to pass the scroll event.
+ * @param {number} activeIndicatorWidth - The width of the active indicator.
+ * @param {number} inactiveIndicatorWidth - The width of the inactive indicator.
+ * @param {...any} props - Additional props to be passed to the flat list component.
+ * @returns {JSX.Element} The rendered flat list component with rectangular indicators.
+ */
 const FlatListWithRectangleIndicator = ({
   activeIndicatorColor,
   inActiveIndicatorColor,
@@ -35,8 +56,6 @@ const FlatListWithRectangleIndicator = ({
   ...props
 }: FlatListWithRectangleIndicatorInterface) => {
   const totalOffsetWidth = data.length * cardWidthPlusMarginValue;
-
-  const width = Dimensions.get('window').width;
   const scrollXProgress = useSharedValue(isRTL ? totalOffsetWidth : 0);
 
   const firstIndicatorRStyle = useAnimatedStyle(() => {
@@ -51,10 +70,7 @@ const FlatListWithRectangleIndicator = ({
       backgroundColor: interpolateColor(
         scrollXProgress.value,
         [0, cardWidthPlusMarginValue * animationScaleFactor],
-        [
-          activeIndicatorColor as string | number,
-          inActiveIndicatorColor as string | number,
-        ]
+        [activeIndicatorColor, inActiveIndicatorColor] as string[]
       ),
     };
   });
@@ -84,38 +100,26 @@ const FlatListWithRectangleIndicator = ({
           Extrapolation.CLAMP
         ),
         backgroundColor: interpolateColor(scrollXProgress.value, myInput, [
-          inActiveIndicatorColor as string | number,
-          activeIndicatorColor as string | number,
-          inActiveIndicatorColor as string | number,
-        ]),
+          inActiveIndicatorColor,
+          activeIndicatorColor,
+          inActiveIndicatorColor,
+        ] as string[]),
       };
     });
     return medIndicatorRStyle;
   }
 
-  //   In the context of a FlatList component in React Native, the event.contentOffset.x property represents the horizontal scroll position of the FlatList. The difference between RTL (Right-to-Left) and LTR (Left-to-Right) for event.contentOffset.x depends on the direction in which the FlatList is being scrolled.
-
-  // In a LTR layout, a positive event.contentOffset.x value indicates that the FlatList is being scrolled to the right, while a negative value indicates scrolling to the left. In other words, as you scroll the FlatList to the right, the event.contentOffset.x value increases, and as you scroll to the left, the value decreases.
-
-  // In an RTL layout, the behavior is reversed. A positive event.contentOffset.x value indicates scrolling to the left, while a negative value indicates scrolling to the right. So, as you scroll the FlatList to the left in an RTL layout, the event.contentOffset.x value increases, and as you scroll to the right, the value decreases.
-
-  // It's important to note that the event.contentOffset.x value is relative to the current scroll position. For example, if you have scrolled the FlatList to the right in a LTR layout, the event.contentOffset.x value will be positive, indicating the amount of scroll to the right from the initial position. Similarly, if you have scrolled the FlatList to the left in an RTL layout, the event.contentOffset.x value will be positive, indicating the amount of scroll to the left from the initial position.
-
-  const initialRTLOffsetWidth = totalOffsetWidth - width;
-
   return (
     <View style={[styles.container, containerStyle]}>
-      <FlatList
-        {...props}
-        horizontal
-        data={data}
-        onScroll={(e) => {
-          passOnScrollEvent?.(e);
-          scrollXProgress.value = isRTL
-            ? initialRTLOffsetWidth - e.nativeEvent.contentOffset.x
-            : e.nativeEvent.contentOffset.x;
+      <SharedFlatList
+        {...{
+          data,
+          cardWidthPlusMarginValue,
+          scrollXProgress,
+          isRTL,
+          passOnScrollEvent,
+          ...props,
         }}
-        showsHorizontalScrollIndicator={false}
       />
       <View style={[styles.indicatorContainer, indicatorContainerStyle]}>
         {data.length > 0 &&

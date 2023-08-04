@@ -7,19 +7,38 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import { I18nManager } from 'react-native';
-import { Dimensions } from 'react-native';
-import { FlatList } from 'react-native';
-import type { ReactNativeFlatListWithIndicatorInterface } from '../types';
+import type {
+  ActiveInactiveIndicatorColorInterface,
+  ReactNativeFlatListWithIndicatorInterface,
+} from '../types';
+import SharedFlatList from './SharedFlatList';
 
 interface FlatListWithCircularIndicatorInterface
-  extends ReactNativeFlatListWithIndicatorInterface {
+  extends ReactNativeFlatListWithIndicatorInterface,
+    ActiveInactiveIndicatorColorInterface {
   circleRadius?: number;
 }
 
+/**
+ * A function that renders a flat list component with circular indicators.
+ *
+ * @param {Array} data - The data to be rendered in the flat list.
+ * @param {string} activeIndicatorColor - The color of the active indicator.
+ * @param {string} inActiveIndicatorColor - The color of the inactive indicator.
+ * @param {number} circleRadius - The radius of the circular indicators (default value is 10).
+ * @param {number} cardWidthPlusMarginValue - The width of the card plus margin.
+ * @param {number} animationScaleFactor - The scaling factor for animation (default value is 1).
+ * @param {Object} containerStyle - The style object for the container.
+ * @param {Object} indicatorContainerStyle - The style object for the indicator container.
+ * @param {Object} customsIndicatorStyle - The style object for the custom indicator.
+ * @param {boolean} isRTL - Flag indicating if the layout is right-to-left (default value is I18nManager.isRTL).
+ * @param {function} passOnScrollEvent - Function to pass the scroll event.
+ * @returns {JSX.Element} The rendered flat list component with circular indicators.
+ */
 const FlatListWithCircularIndicator = ({
+  data,
   activeIndicatorColor,
   inActiveIndicatorColor,
-  data,
   circleRadius = 10,
   cardWidthPlusMarginValue,
   animationScaleFactor = 1,
@@ -32,7 +51,6 @@ const FlatListWithCircularIndicator = ({
 }: FlatListWithCircularIndicatorInterface) => {
   const totalOffsetWidth = data.length * cardWidthPlusMarginValue;
 
-  const width = Dimensions.get('window').width;
   const scrollXProgress = useSharedValue(isRTL ? totalOffsetWidth : 0);
 
   const firstIndicatorRStyle = useAnimatedStyle(() => {
@@ -69,21 +87,17 @@ const FlatListWithCircularIndicator = ({
     return medIndicatorRStyle;
   }
 
-  const initialRTLOffsetWidth = totalOffsetWidth - width;
-
   return (
     <View style={[styles.container, containerStyle]}>
-      <FlatList
-        {...props}
-        horizontal
-        data={data}
-        onScroll={(e) => {
-          passOnScrollEvent?.(e);
-          scrollXProgress.value = isRTL
-            ? initialRTLOffsetWidth - e.nativeEvent.contentOffset.x
-            : e.nativeEvent.contentOffset.x;
+      <SharedFlatList
+        {...{
+          data,
+          cardWidthPlusMarginValue,
+          scrollXProgress,
+          isRTL,
+          passOnScrollEvent,
+          ...props,
         }}
-        showsHorizontalScrollIndicator={false}
       />
       <View style={[styles.indicatorContainer, indicatorContainerStyle]}>
         {data.length > 0 &&
