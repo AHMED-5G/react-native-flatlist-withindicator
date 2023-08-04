@@ -54,7 +54,7 @@ const FlatListWithRectangleIndicator = ({
   isRTL = I18nManager.isRTL,
   passOnScrollEvent,
   ...props
-}: FlatListWithRectangleIndicatorInterface) => {
+}: FlatListWithRectangleIndicatorInterface): JSX.Element => {
   const totalOffsetWidth = data.length * cardWidthPlusMarginValue;
   const scrollXProgress = useSharedValue(isRTL ? totalOffsetWidth : 0);
 

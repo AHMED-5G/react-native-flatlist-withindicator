@@ -1,5 +1,7 @@
 # react-native-flatlist-withindicator
 
+![npm](https://img.shields.io/npm/dt/react-native-flatlist-withindicator)  ![npm](https://img.shields.io/npm/dw/react-native-flatlist-withindicator)
+
 ## Description
 
 `react-native-flatlist-withindicator` is a package that extends the functionality of the original React Native FlatList component. It provides customizable indicators to display the current active item in a horizontal list.
@@ -108,17 +110,17 @@ const styles = StyleSheet.create({
 
 Shared Props Table:
 
-| Name                       | Type                                                       | Required/Optional | Description                                                                                          |
-| -------------------------- | ---------------------------------------------------------- | ----------------- | ---------------------------------------------------------------------------------------------------- |
-| `activeIndicatorColor`     | `string`                                                   | Required          | The color of the active indicator.                                                                   |
-| `inActiveIndicatorColor`   | `string`                                                   | Required          | The color of the inactive indicators.                                                                |
-| `data`                     | `Array<any>`                                               | Required          | An array of data items to be rendered in the list.                                                   |
-| `cardWidthPlusMarginValue` | `number`                                                   | Required          | The width of each list item plus any margin or padding.                                              |
-| `animationScaleFactor`     | `number`                                                   | Optional          | The scaling and animation factor for the indicators. Default value is `1`.                           |
-| `containerStyle`           | `ViewStyle`                                                | Optional          | Additional styles to be applied to the container view.                                               |
-| `indicatorContainerStyle`  | `ViewStyle`                                                | Optional          | Additional styles to be applied to the indicator container view.                                     |
-| `customsIndicatorStyle`    | `ViewStyle`                                                | Optional          | Additional styles to be applied to the custom indicators.                                            |
-| `isRTL`                    | `boolean`                                                  | Optional          | Determines if the layout is right-to-left. Default value is based on the device's language settings. |
+| Name                       | Type              | Required/Optional | Description                                                                                          |
+| -------------------------- | ----------------- | ----------------- | ---------------------------------------------------------------------------------------------------- |
+| `activeIndicatorColor`     | `string`          | Required          | The color of the active indicator.                                                                   |
+| `inActiveIndicatorColor`   | `string`          | Required          | The color of the inactive indicators.                                                                |
+| `data`                     | `Array<any>`      | Required          | An array of data items to be rendered in the list.                                                   |
+| `cardWidthPlusMarginValue` | `number`          | Required          | The width of each list item plus any margin or padding.                                              |
+| `animationScaleFactor`     | `number`          | Optional          | The scaling and animation factor for the indicators. Default value is `1`.                           |
+| `containerStyle`           | `ViewStyle`       | Optional          | Additional styles to be applied to the container view.                                               |
+| `indicatorContainerStyle`  | `ViewStyle`       | Optional          | Additional styles to be applied to the indicator container view.                                     |
+| `customsIndicatorStyle`    | `ViewStyle`       | Optional          | Additional styles to be applied to the custom indicators.                                            |
+| `isRTL`                    | `boolean`         | Optional          | Determines if the layout is right-to-left. Default value is based on the device's language settings. |
 | `passOnScrollEvent`        | `(event) => void` | Optional          | Passes the `onScroll` event from the parent component to the child component.                        |
 
 Note: Any other props accepted by the React Native FlatList component can also be used with `react-native-flatlist-withindicator`. However, please be aware that the following props are excluded from the standard FlatList component:
