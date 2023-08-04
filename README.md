@@ -119,7 +119,7 @@ Shared Props Table:
 | `indicatorContainerStyle`  | `ViewStyle`                                                | Optional          | Additional styles to be applied to the indicator container view.                                     |
 | `customsIndicatorStyle`    | `ViewStyle`                                                | Optional          | Additional styles to be applied to the custom indicators.                                            |
 | `isRTL`                    | `boolean`                                                  | Optional          | Determines if the layout is right-to-left. Default value is based on the device's language settings. |
-| `passOnScrollEvent`        | `(event: NativeSyntheticEvent<NativeScrollEvent>) => void` | Optional          | Passes the `onScroll` event from the parent component to the child component.                        |
+| `passOnScrollEvent`        | `(event) => void` | Optional          | Passes the `onScroll` event from the parent component to the child component.                        |
 
 Note: Any other props accepted by the React Native FlatList component can also be used with `react-native-flatlist-withindicator`. However, please be aware that the following props are excluded from the standard FlatList component:
 
