@@ -1,7 +1,7 @@
-import { render } from '@testing-library/react-native';
 import { FlatListWithRectangleIndicator } from '../index';
 import React from 'react';
 // import {describe, expect, test} from '@jest/globals';
+import { render } from '@testing-library/react-native';
 
 function sum(num1: number, num2: number) {
   return num1 + num2;
