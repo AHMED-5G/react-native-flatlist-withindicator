@@ -11,4 +11,7 @@ module.exports = {
   ],
   fakeTimers: { enableGlobally: true },
   cache: false,
+  testPathIgnorePatterns: [
+    '<rootDir>/lib/typescript/__tests__/index.test.d.ts',
+  ],
 };
