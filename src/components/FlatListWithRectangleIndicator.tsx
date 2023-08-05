@@ -73,7 +73,7 @@ const FlatListWithRectangleIndicator = ({
         [activeIndicatorColor, inActiveIndicatorColor] as string[]
       ),
     };
-  });
+  }, [scrollXProgress]);
 
   /**
    * Calculates the `medIndicatorRStyle` object based on the provided `index`.
@@ -121,11 +121,15 @@ const FlatListWithRectangleIndicator = ({
           ...props,
         }}
       />
-      <View style={[styles.indicatorContainer, indicatorContainerStyle]}>
+      <View
+        style={[styles.indicatorContainer, indicatorContainerStyle]}
+       
+      >
         {data.length > 0 &&
           data.map((_, index) => {
             return (
               <Animated.View
+                testID={`indicator-${index}`}
                 key={index}
                 style={[
                   styles.indicatorStyle,

@@ -35,7 +35,7 @@ export default function App() {
           keyExtractor={(_, index) => index.toString()}
         />
       </View>
-      <View style={styles.flatListContainer}>
+      {/* <View style={styles.flatListContainer}>
         <FlatListWithRectangleIndicator
           activeIndicatorColor={'#6a154e'}
           inActiveIndicatorColor={'lightgrey'}
@@ -56,7 +56,7 @@ export default function App() {
           keyExtractor={(_, index) => index.toString()}
           animationScaleFactor={0.57}
         />
-      </View>
+      </View> */}
     </ScrollView>
   );
 }
