@@ -73,7 +73,7 @@ const FlatListWithRectangleIndicator = ({
         [activeIndicatorColor, inActiveIndicatorColor] as string[]
       ),
     };
-  }, [scrollXProgress]);
+  });
 
   /**
    * Calculates the `medIndicatorRStyle` object based on the provided `index`.
@@ -112,6 +112,7 @@ const FlatListWithRectangleIndicator = ({
   return (
     <View style={[styles.container, containerStyle]}>
       <SharedFlatList
+        testID="scrollable-component"
         {...{
           data,
           cardWidthPlusMarginValue,
@@ -121,10 +122,7 @@ const FlatListWithRectangleIndicator = ({
           ...props,
         }}
       />
-      <View
-        style={[styles.indicatorContainer, indicatorContainerStyle]}
-       
-      >
+      <View style={[styles.indicatorContainer, indicatorContainerStyle]}>
         {data.length > 0 &&
           data.map((_, index) => {
             return (
