@@ -89,7 +89,7 @@ describe('FlatListWithRectangleIndicator', () => {
     expect(indicator1).toHaveAnimatedStyle(inActiveStyle);
     expect(indicator2).toHaveAnimatedStyle(activeStyle);
     expect(indicator3).toHaveAnimatedStyle(inActiveStyle);
-    //بالعربي
+
     //second scroll to the right with cardWidthPlusMarginValue * 2
     fireEvent.scroll(
       scrollableComponent,
