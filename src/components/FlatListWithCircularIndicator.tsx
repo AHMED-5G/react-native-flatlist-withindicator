@@ -12,10 +12,14 @@ import type {
   ReactNativeFlatListWithIndicatorInterface,
 } from '../types';
 import SharedFlatList from './SharedFlatList';
+import {
+  ACTIVE_INDICATOR_COLOR,
+  INACTIVE_INDICATOR_COLOR,
+} from 'src/constants';
 
 interface FlatListWithCircularIndicatorInterface
   extends ReactNativeFlatListWithIndicatorInterface,
-    ActiveInactiveIndicatorColorInterface {
+    Partial<ActiveInactiveIndicatorColorInterface> {
   circleRadius?: number;
 }
 
@@ -35,10 +39,11 @@ interface FlatListWithCircularIndicatorInterface
  * @param {function} passOnScrollEvent - Function to pass the scroll event.
  * @returns {JSX.Element} The rendered flat list component with circular indicators.
  */
+/** */
 const FlatListWithCircularIndicator = ({
   data,
-  activeIndicatorColor,
-  inActiveIndicatorColor,
+  activeIndicatorColor = ACTIVE_INDICATOR_COLOR,
+  inActiveIndicatorColor = INACTIVE_INDICATOR_COLOR,
   circleRadius = 10,
   cardWidthPlusMarginValue,
   animationScaleFactor = 1,

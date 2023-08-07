@@ -112,8 +112,8 @@ Shared Props Table:
 
 | Name                       | Type              | Required/Optional | Description                                                                                          |
 | -------------------------- | ----------------- | ----------------- | ---------------------------------------------------------------------------------------------------- |
-| `activeIndicatorColor`     | `string`          | Required          | The color of the active indicator.                                                                   |
-| `inActiveIndicatorColor`   | `string`          | Required          | The color of the inactive indicators.                                                                |
+| `activeIndicatorColor`     | `string`          | Optional          | The color of the active indicator.                                                                   |
+| `inActiveIndicatorColor`   | `string`          | Optional          | The color of the inactive indicators.                                                                |
 | `data`                     | `Array<any>`      | Required          | An array of data items to be rendered in the list.                                                   |
 | `cardWidthPlusMarginValue` | `number`          | Required          | The width of each list item plus any margin or padding.                                              |
 | `animationScaleFactor`     | `number`          | Optional          | The scaling and animation factor for the indicators. Default value is `1`.                           |

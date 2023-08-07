@@ -14,10 +14,14 @@ import type {
   ActiveInactiveIndicatorColorInterface,
 } from '../types';
 import SharedFlatList from './SharedFlatList';
+import {
+  ACTIVE_INDICATOR_COLOR,
+  INACTIVE_INDICATOR_COLOR,
+} from 'src/constants';
 
 interface FlatListWithRectangleIndicatorInterface
   extends ReactNativeFlatListWithIndicatorInterface,
-    ActiveInactiveIndicatorColorInterface {
+    Partial<ActiveInactiveIndicatorColorInterface> {
   activeIndicatorWidth?: number;
   inactiveIndicatorWidth?: number;
 }
@@ -41,8 +45,8 @@ interface FlatListWithRectangleIndicatorInterface
  * @returns {JSX.Element} The rendered flat list component with rectangular indicators.
  */
 const FlatListWithRectangleIndicator = ({
-  activeIndicatorColor,
-  inActiveIndicatorColor,
+  activeIndicatorColor = ACTIVE_INDICATOR_COLOR,
+  inActiveIndicatorColor = INACTIVE_INDICATOR_COLOR,
   data,
   cardWidthPlusMarginValue,
   activeIndicatorWidth = 32,

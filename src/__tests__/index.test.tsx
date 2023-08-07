@@ -18,8 +18,6 @@ describe('FlatListWithRectangleIndicator', () => {
         data={data.slice(0, 3)}
         cardWidthPlusMarginValue={cardWidthPlusMarginValue}
         renderItem={undefined}
-        activeIndicatorColor={activeColor}
-        inActiveIndicatorColor={inactiveColor}
       />
     );
     const indicator1 = getByTestId('indicator-0');
