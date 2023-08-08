@@ -54,8 +54,6 @@ export default function App() {
     <ScrollView style={styles.container}>
       <View style={styles.flatListContainer}>
         <FlatListWithRectangleIndicator
-          activeIndicatorColor={'#6a154e'}
-          inActiveIndicatorColor={'lightgrey'}
           renderItem={({ item }) => <Card item={item} />}
           data={data}
           cardWidthPlusMarginValue={cardWidth + marginValue}
@@ -64,8 +62,6 @@ export default function App() {
       </View>
       <View style={styles.flatListContainer}>
         <FlatListWithRectangleIndicator
-          activeIndicatorColor={'#6a154e'}
-          inActiveIndicatorColor={'lightgrey'}
           renderItem={({ item }) => <Card item={item} />}
           data={data}
           cardWidthPlusMarginValue={cardWidth + marginValue}
@@ -75,8 +71,6 @@ export default function App() {
       </View>
       <View style={styles.flatListContainer}>
         <FlatListWithCircularIndicator
-          activeIndicatorColor={'#6a154e'}
-          inActiveIndicatorColor={'lightgrey'}
           renderItem={({ item }) => <Card item={item} />}
           data={data}
           cardWidthPlusMarginValue={cardWidth + marginValue}
