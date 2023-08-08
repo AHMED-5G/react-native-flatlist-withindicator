@@ -13,5 +13,7 @@ module.exports = {
   cache: false,
   testPathIgnorePatterns: [
     '<rootDir>/lib/typescript/__tests__/index.test.d.ts',
+    '/node_modules/',
+    '/lib/',
   ],
 };

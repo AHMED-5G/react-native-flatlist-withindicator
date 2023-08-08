@@ -1,6 +1,6 @@
 # react-native-flatlist-withindicator
 
-![npm](https://img.shields.io/npm/dt/react-native-flatlist-withindicator)  ![npm](https://img.shields.io/npm/dw/react-native-flatlist-withindicator)
+![npm](https://img.shields.io/npm/dt/react-native-flatlist-withindicator) ![npm](https://img.shields.io/npm/dw/react-native-flatlist-withindicator)
 
 ## Description
 
