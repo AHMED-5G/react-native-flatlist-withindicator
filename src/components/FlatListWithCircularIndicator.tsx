@@ -12,10 +12,7 @@ import type {
   ReactNativeFlatListWithIndicatorInterface,
 } from '../types';
 import SharedFlatList from './SharedFlatList';
-import {
-  ACTIVE_INDICATOR_COLOR,
-  INACTIVE_INDICATOR_COLOR,
-} from 'src/constants';
+import { ACTIVE_INDICATOR_COLOR, INACTIVE_INDICATOR_COLOR } from '../constants';
 
 interface FlatListWithCircularIndicatorInterface
   extends ReactNativeFlatListWithIndicatorInterface,
@@ -82,11 +79,11 @@ const FlatListWithCircularIndicator = ({
     ];
     const medIndicatorRStyle = useAnimatedStyle(() => {
       return {
-        backgroundColor: interpolateColor(scrollXProgress.value, myInput, [
-          inActiveIndicatorColor,
-          activeIndicatorColor,
-          inActiveIndicatorColor,
-        ] as string[]),
+        // backgroundColor: interpolateColor(scrollXProgress.value, myInput, [
+        //   inActiveIndicatorColor,
+        //   activeIndicatorColor,
+        //   inActiveIndicatorColor,
+        // ] as string[]),
       };
     });
     return medIndicatorRStyle;
@@ -109,6 +106,7 @@ const FlatListWithCircularIndicator = ({
           data.map((_, index) => {
             return (
               <Animated.View
+                testID={`indicator-${index}`}
                 key={index}
                 style={[
                   styles.indicatorStyle,

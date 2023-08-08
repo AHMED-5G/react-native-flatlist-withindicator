@@ -1,20 +1,39 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react-native';
-import { FlatListWithRectangleIndicator } from '../index';
+import { FlatListWithCircularIndicator } from '../index';
+import { ACTIVE_INDICATOR_COLOR, INACTIVE_INDICATOR_COLOR } from '../constants';
+import { ViewStyle } from 'react-native';
 
-describe('FlatListWithRectangleIndicator', () => {
-  const activeColor = 'rgba(0, 0, 0, 1)';
-  const inactiveColor = 'rgba(255, 255, 255, 1)';
-  const activeWidthValue = 32;
-  const inActiveWidthValue = 12;
-  const cardHeight = 200;
+const cardHeight = 200;
+const data = ['Item 1', 'Item 2', 'Item 3'];
+const cardWidthPlusMarginValue = 300;
+const screenWidth = 300;
+function eventData(scrollXValue: number) {
+  return {
+    nativeEvent: {
+      contentOffset: {
+        y: 0,
+        //play around this value to show the live change with sharedValue change from 0 - cardWidthPlusMarginValue
+        x: scrollXValue,
+      },
+      contentSize: {
+        // Dimensions of the scrollable content
+        height: cardHeight,
+        width: cardWidthPlusMarginValue * data.length,
+      },
+      layoutMeasurement: {
+        // Dimensions of the device
+        height: 800,
+        width: screenWidth,
+      },
+    },
+  };
+}
 
-  const data = ['Item 1', 'Item 2', 'Item 3'];
-  const cardWidthPlusMarginValue = 300;
-
+describe('FlatList With Circular Indicator', () => {
   it('renders the flat list with correct number of items', () => {
     const { getByTestId } = render(
-      <FlatListWithRectangleIndicator
+      <FlatListWithCircularIndicator
         data={data.slice(0, 3)}
         cardWidthPlusMarginValue={cardWidthPlusMarginValue}
         renderItem={undefined}
@@ -29,22 +48,19 @@ describe('FlatListWithRectangleIndicator', () => {
     expect(indicator3).toBeTruthy();
   });
 
-  const activeStyle = {
-    width: activeWidthValue,
-    backgroundColor: activeColor,
+  const activeStyle: ViewStyle = {
+    backgroundColor: ACTIVE_INDICATOR_COLOR,
   };
-  const inActiveStyle = {
-    width: inActiveWidthValue,
-    backgroundColor: inactiveColor,
+  const inActiveStyle: ViewStyle = {
+    backgroundColor: INACTIVE_INDICATOR_COLOR,
   };
+
   it('changes the width and background color of the indicators when scrolling', async () => {
     const { getByTestId } = render(
-      <FlatListWithRectangleIndicator
+      <FlatListWithCircularIndicator
         data={data}
         cardWidthPlusMarginValue={cardWidthPlusMarginValue}
         renderItem={undefined}
-        activeIndicatorColor={activeColor}
-        inActiveIndicatorColor={inactiveColor}
       />
     );
 
@@ -57,28 +73,6 @@ describe('FlatListWithRectangleIndicator', () => {
     expect(indicator3).toHaveStyle(inActiveStyle);
 
     const scrollableComponent = getByTestId('scrollable-component');
-
-    function eventData(scrollXValue: number) {
-      return {
-        nativeEvent: {
-          contentOffset: {
-            y: 0,
-            //play around this value to show the live change with sharedValue change from 0 - cardWidthPlusMarginValue
-            x: scrollXValue,
-          },
-          contentSize: {
-            // Dimensions of the scrollable content
-            height: cardHeight,
-            width: cardWidthPlusMarginValue * data.length,
-          },
-          layoutMeasurement: {
-            // Dimensions of the device
-            height: 800,
-            width: 375,
-          },
-        },
-      };
-    }
 
     // first scroll to the left with cardWidthPlusMarginValue
     fireEvent.scroll(scrollableComponent, eventData(cardWidthPlusMarginValue));

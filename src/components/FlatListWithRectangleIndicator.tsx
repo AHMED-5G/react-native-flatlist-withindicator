@@ -14,10 +14,7 @@ import type {
   ActiveInactiveIndicatorColorInterface,
 } from '../types';
 import SharedFlatList from './SharedFlatList';
-import {
-  ACTIVE_INDICATOR_COLOR,
-  INACTIVE_INDICATOR_COLOR,
-} from 'src/constants';
+import { ACTIVE_INDICATOR_COLOR, INACTIVE_INDICATOR_COLOR } from '../constants';
 
 interface FlatListWithRectangleIndicatorInterface
   extends ReactNativeFlatListWithIndicatorInterface,
@@ -91,6 +88,7 @@ const FlatListWithRectangleIndicator = ({
       cardWidthPlusMarginValue * index * animationScaleFactor,
       cardWidthPlusMarginValue * 2 * index * animationScaleFactor,
     ];
+
     const medIndicatorRStyle = useAnimatedStyle(() => {
       return {
         width: interpolate(
@@ -116,7 +114,6 @@ const FlatListWithRectangleIndicator = ({
   return (
     <View style={[styles.container, containerStyle]}>
       <SharedFlatList
-        testID="scrollable-component"
         {...{
           data,
           cardWidthPlusMarginValue,

@@ -8,7 +8,7 @@ import {
 const marginValue = 10;
 const cardWidth = 200;
 
-const Card = ({ item }) => {
+const Card = ({ item }: { item: any }) => {
   return (
     <View
       style={[
@@ -33,7 +33,7 @@ export default function App() {
           keyExtractor={(_, index) => index.toString()}
         />
       </View>
-      {/* <View style={styles.flatListContainer}>
+      <View style={styles.flatListContainer}>
         <FlatListWithRectangleIndicator
           renderItem={({ item }) => <Card item={item} />}
           data={data}
@@ -50,7 +50,7 @@ export default function App() {
           keyExtractor={(_, index) => index.toString()}
           animationScaleFactor={0.57}
         />
-      </View> */}
+      </View>
     </ScrollView>
   );
 }

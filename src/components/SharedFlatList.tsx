@@ -29,6 +29,7 @@ const SharedFlatList = ({
   // It's important to note that the event.contentOffset.x value is relative to the current scroll position. For example, if you have scrolled the FlatList to the right in a LTR layout, the event.contentOffset.x value will be positive, indicating the amount of scroll to the right from the initial position. Similarly, if you have scrolled the FlatList to the left in an RTL layout, the event.contentOffset.x value will be positive, indicating the amount of scroll to the left from the initial position.
   return (
     <FlatList
+      testID="scrollable-component"
       {...props}
       horizontal
       data={data}
