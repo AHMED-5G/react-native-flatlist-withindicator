@@ -1,7 +1,8 @@
 import { Dimensions, FlatList, I18nManager } from 'react-native';
 import React from 'react';
-import { ReactNativeFlatListWithIndicatorInterface } from 'src/types';
+
 import { SharedValue } from 'react-native-reanimated';
+import { ReactNativeFlatListWithIndicatorInterface } from '../types';
 
 interface SharedFlatListInterface
   extends ReactNativeFlatListWithIndicatorInterface {
