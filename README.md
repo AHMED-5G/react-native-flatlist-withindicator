@@ -20,7 +20,8 @@ To install the package, run the following command:
 
 official documentation on how to [Installation - React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation#installing-the-package)
 
-`npm install react-native-flatlist-withindicator`
+`npm install react-native-flatlist-withindicator@0.1.2`
+<!-- `npm install react-native-flatlist-withindicator` -->
 
 ## Usage
 
