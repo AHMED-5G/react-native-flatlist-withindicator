@@ -72,19 +72,18 @@ const FlatListWithCircularIndicator = ({
    * @returns The `medIndicatorRStyle` object.
    */
   function MedWithIndex(index: number) {
-    console.log('FlatListWithCircularIndicator.tsx -> ', index);
-    // const myInput = [
-    //   ((cardWidthPlusMarginValue * index) / 2) * animationScaleFactor,
-    //   cardWidthPlusMarginValue * index * animationScaleFactor,
-    //   cardWidthPlusMarginValue * 2 * index * animationScaleFactor,
-    // ];
+    const myInput = [
+      ((cardWidthPlusMarginValue * index) / 2) * animationScaleFactor,
+      cardWidthPlusMarginValue * index * animationScaleFactor,
+      cardWidthPlusMarginValue * 2 * index * animationScaleFactor,
+    ];
     const medIndicatorRStyle = useAnimatedStyle(() => {
       return {
-        // backgroundColor: interpolateColor(scrollXProgress.value, myInput, [
-        //   inActiveIndicatorColor,
-        //   activeIndicatorColor,
-        //   inActiveIndicatorColor,
-        // ] as string[]),
+        backgroundColor: interpolateColor(scrollXProgress.value, myInput, [
+          inActiveIndicatorColor,
+          activeIndicatorColor,
+          inActiveIndicatorColor,
+        ] as string[]),
       };
     });
     return medIndicatorRStyle;
